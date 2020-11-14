@@ -12,11 +12,6 @@ x = input(" inserte su texto aqui: \n")
 list = []
 count =0
 
-
-
-
-
-
 # fuciones de analisis de texto -----------------------------------#
 
 def listando():
@@ -35,10 +30,40 @@ def count_space():
         else:
             continue
     return l
-        
 
+#cuenta la frecuencia de cada letra
+def frecuencia(text, char):
+    count =  0
+    for c in text:
+        if c == char and c != " ":
+            count += 1
+        else:
+            continue
+    return count
+
+def frecuencia_total():
+    diccio = {}
+    for c in x:
+        m = frecuencia(x, c)
+        if m != 0:
+            diccio[c] = m
+        else:
+            continue
+    return diccio
+
+#ejecuciones
+diccio = frecuencia_total()
+
+    
 # Vista
     
 listando(), print(" la primera palabra es {}".format(list[0]))
 print("hay ", count_space(), "espacios en el texto analizado" )
-print(x)
+for c in diccio.keys():
+    count = 0
+    if c != " ":
+        print("la palabra", c, "se repite", diccio.get(c, c))
+    else: 
+        continue
+
+
