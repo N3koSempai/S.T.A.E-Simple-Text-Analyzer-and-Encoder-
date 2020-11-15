@@ -4,7 +4,7 @@ Created on Fri Nov 13 01:38:52 2020
 
 @author: n3ko
 """
-
+from string import ascii_lowercase, ascii_uppercase
 
 x = input(" inserte su texto aqui: \n")
 
@@ -51,6 +51,19 @@ def frecuencia_total():
             continue
     return diccio
 
+# conteo letras mayusculas y minusculas
+def Mmtamano():
+    Count = 0
+    count = 0
+    for c in x:
+        if c in ascii_lowercase:
+            count += 1
+        elif c in ascii_uppercase:
+            Count += 1
+        else:
+            continue
+    return count, Count
+
 #ejecuciones
 diccio = frecuencia_total()
 
@@ -65,5 +78,6 @@ for c in diccio.keys():
         print("la palabra", c, "se repite", diccio.get(c, c))
     else: 
         continue
-
+lista = Mmtamano()
+print("hay ", lista[0],"minusculas y ", lista[1], "Mayusculas", "en el texto")
 
