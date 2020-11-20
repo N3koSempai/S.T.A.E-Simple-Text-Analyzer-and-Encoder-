@@ -7,11 +7,11 @@ Created on Fri Nov 13 01:38:52 2020
 from string import ascii_lowercase, ascii_uppercase
 
 
-#variables globales
+#global variable
 list = []
 count =0
 
-# fuciones de analisis de texto -----------------------------------#
+# logical funtions -----------------------------------#
 
 def listando():
     for c in x.split(" "): 
@@ -52,7 +52,7 @@ def caesar_code(text, dec, jump=6):
 
 
 
-#cuenta los espacios en el texto
+#count the space in the text
 def count_space():
     l = 0
     for c in str(x):
