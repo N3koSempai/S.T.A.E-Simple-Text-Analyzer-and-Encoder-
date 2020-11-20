@@ -6,7 +6,6 @@ Created on Fri Nov 13 01:38:52 2020
 """
 from string import ascii_lowercase, ascii_uppercase
 
-x = input(" inserte su texto aqui: \n")
 
 #variables globales
 list = []
@@ -15,11 +14,43 @@ count =0
 # fuciones de analisis de texto -----------------------------------#
 
 def listando():
-    count = 0
-    for c in x.split(" "):
-        count +=1
+    for c in x.split(" "): 
         list.append(c)
     return(list)
+
+
+#funtion for caesa code. Encode and decode.
+# jump is the number of jump in the alphabet(not 0 or negative number)
+# dec is boolean for decode or encode
+diccio = {}
+diccioinvert = {}
+
+def funcion_diccio():
+    for c, n in zip(ascii_lowercase, range(1, 27)):
+        diccio[c] = n
+        diccioinvert[n] = c
+
+
+def caesar_code(text, dec, jump=6):
+    texte = ""
+    for c in text.lower():
+        if c in ascii_lowercase and dec == False and jump >= 1:
+               num = diccio.get(c)
+               num += jump
+               while num > 26:
+                     num -= 26
+               texte += diccioinvert.get(num)
+        elif c in ascii_lowercase and dec == True and jump >= 1:
+            num = diccio.get(c)
+            num -= jump
+            while num <= 0:
+                  num += 26
+            texte += diccioinvert.get(num)
+        else:
+            texte = "error"
+    return texte
+
+
 
 #cuenta los espacios en el texto
 def count_space():
@@ -69,6 +100,9 @@ diccio = frecuencia_total()
 
     
 # Vista
+
+
+x = input(" inserte su texto aqui: \n")
     
 listando(), print(" la primera palabra es {}".format(list[0]))
 print("hay ", count_space(), "espacios en el texto analizado" )
@@ -80,4 +114,3 @@ for c in diccio.keys():
         continue
 lista = Mmtamano()
 print("hay ", lista[0],"minusculas y ", lista[1], "Mayusculas", "en el texto")
-
