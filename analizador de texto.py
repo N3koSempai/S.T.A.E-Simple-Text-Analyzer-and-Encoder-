@@ -5,19 +5,39 @@ Created on Fri Nov 13 01:38:52 2020
 @author: n3ko
 """
 from string import ascii_lowercase, ascii_uppercase
+from tkinter import *
+from tkinter import filedialog
 
+
+# View
+
+raiz = Tk()
+raiz.title(" analizador de texto FILO")
+raiz.resizable(False, False)
+#raiz.iconbitmap()      ..... pendiente de disenar un icono
+raiz.geometry("708x460")
+raiz.config(bg = "black")
+
+
+pframe = Frame()
+pframe.pack(side = "left")
+pframe.config(bg = "gray")
+pframe.config(width = "400", height = "460")
+
+viewframe = Frame()
+viewframe.config(width = "300", height = "460",)
+viewframe.config(bg = "green")
+viewframe.pack(side = "right")
 
 #global variable
 list = []
 count =0
 
-# logical funtions -----------------------------------#
+# logical funtion
 
-def listando():
-    for c in x.split(" "): 
-        list.append(c)
-    return(list)
-
+def openfile():
+    file1 = filedialog.askopenfilename(title = "abrir", initialdir="C:\\")
+    return file1
 
 #funtion for caesa code. Encode and decode.
 # jump is the number of jump in the alphabet(not 0 or negative number)
@@ -62,7 +82,7 @@ def count_space():
             continue
     return l
 
-#cuenta la frecuencia de cada letra
+#count the frecuency of any letter
 def frecuencia(text, char):
     count =  0
     for c in text:
@@ -82,7 +102,7 @@ def frecuencia_total():
             continue
     return diccio
 
-# conteo letras mayusculas y minusculas
+# count Mayus and min
 def Mmtamano():
     Count = 0
     count = 0
@@ -95,16 +115,24 @@ def Mmtamano():
             continue
     return count, Count
 
-#ejecuciones
-diccio = frecuencia_total()
 
+
+
+
+#labels in View
+welcomelabel = Label(pframe, text = "Welcome to Filo text analizer", fg = "black", font =("Arial", 12), bg = "gray")
+welcomelabel.place(x = 70, y = 20)
+
+
+
+Button (pframe, text = "select file", command = openfile).place(x = 150, y = 50)
     
-# Vista
+
 
 
 x = input(" inserte su texto aqui: \n")
-    
-listando(), print(" la primera palabra es {}".format(list[0]))
+diccio = frecuencia_total()  
+ 
 print("hay ", count_space(), "espacios en el texto analizado" )
 for c in diccio.keys():
     count = 0
@@ -114,3 +142,8 @@ for c in diccio.keys():
         continue
 lista = Mmtamano()
 print("hay ", lista[0],"minusculas y ", lista[1], "Mayusculas", "en el texto")
+
+
+
+
+raiz.mainloop()
