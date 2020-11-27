@@ -5,8 +5,7 @@ Created on Fri Nov 13 01:38:52 2020
 @author: n3ko
 """
 from string import ascii_lowercase, ascii_uppercase
-from tkinter import *
-from tkinter import filedialog
+from tkinter import filedialog, Tk, Frame, Button, Label, Entry, Text, Scrollbar
 
 
 # View
@@ -32,12 +31,13 @@ viewframe.pack(side = "right")
 #global variable
 list = []
 count =0
-
+result="hola"
 # logical funtion
 
 def openfile():
+    global file1
     file1 = filedialog.askopenfilename(title = "abrir", initialdir="C:\\")
-    return file1
+    
 
 #funtion for caesa code. Encode and decode.
 # jump is the number of jump in the alphabet(not 0 or negative number)
@@ -75,7 +75,7 @@ def caesar_code(text, dec, jump=6):
 #count the space in the text
 def count_space():
     l = 0
-    for c in str(x):
+    for c in str(file1):
         if c == " ":            
             l += 1
         else:
@@ -94,8 +94,8 @@ def frecuencia(text, char):
 
 def frecuencia_total():
     diccio = {}
-    for c in x:
-        m = frecuencia(x, c)
+    for c in file1:
+        m = frecuencia(file1, c)
         if m != 0:
             diccio[c] = m
         else:
@@ -106,7 +106,7 @@ def frecuencia_total():
 def Mmtamano():
     Count = 0
     count = 0
-    for c in x:
+    for c in file1:
         if c in ascii_lowercase:
             count += 1
         elif c in ascii_uppercase:
@@ -117,6 +117,28 @@ def Mmtamano():
 
 
 
+# start the analize (call all funtion for analize the text)
+
+def star_analize():
+    visualstadistic.config(state = "normal")
+    diccio = frecuencia_total()
+    lista = Mmtamano()
+    try:
+        l = "hay ", count_space(), "espacios en el texto analizado"
+        for c in diccio.keys():
+            if c != " ":
+                n = ("la palabra", c, "se repite", diccio.get(c, c))
+            else: 
+                continue
+        b = "hay ", lista[0],"minusculas y ", lista[1], "Mayusculas", "en el texto"
+
+        result = l + n + b
+        visualstadistic.insert("insert", result)
+        visualstadistic.config(state = "disabled")
+
+    except:
+        return "not file selected"
+
 
 
 #labels in View
@@ -125,25 +147,25 @@ welcomelabel.place(x = 70, y = 20)
 
 
 
-Button (pframe, text = "select file", command = openfile).place(x = 150, y = 50)
-    
-
-
-
-x = input(" inserte su texto aqui: \n")
-diccio = frecuencia_total()  
- 
-print("hay ", count_space(), "espacios en el texto analizado" )
-for c in diccio.keys():
-    count = 0
-    if c != " ":
-        print("la palabra", c, "se repite", diccio.get(c, c))
-    else: 
-        continue
-lista = Mmtamano()
-print("hay ", lista[0],"minusculas y ", lista[1], "Mayusculas", "en el texto")
+Button (pframe, text = "select file", command = openfile).place(x = 170, y = 50)
+Button (pframe, text = "analize", command = star_analize).place(x = 180,y = 400)
 
 
 
 
+switch = "disabled"
+
+# viewframe ---------------------------------
+visualdatalabel = Label(viewframe, text = "view data").place(x = 120, y = 40)
+visualstadistic = Text(viewframe, width = 28, height = 20, bg = "black", fg = "green", font = "Arial")
+visualstadistic.config(insertbackground = "green", state = "disabled")
+visualstadistic.place(x = 20, y = 70)
+
+
+
+scrollvartvs = Scrollbar(viewframe, command = visualstadistic.yview)
+scrollvartvs.place(x = 277, y = 70, height = 160)
+visualstadistic.config(yscrollcommand = scrollvartvs.set)
+
+""" ADVERTENCIA REPARAR RECONOCIMIENTO DE / : y . COMO LETRA """
 raiz.mainloop()
