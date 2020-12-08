@@ -5,9 +5,9 @@ Created on Fri Nov 13 01:38:52 2020
 @author: n3ko
 """
 from string import ascii_lowercase, ascii_uppercase
-from tkinter import filedialog, Tk, Frame, Button, Label, Entry, Text, Scrollbar
+from tkinter import filedialog, Tk, Frame, Button, Label, Text, Scrollbar
 
-
+#test new branch
 # View
 
 raiz = Tk()
@@ -32,11 +32,19 @@ viewframe.pack(side = "right")
 list = []
 count =0
 result="hola"
+error = 0
 # logical funtion
 
 def openfile():
-    global file1
-    file1 = filedialog.askopenfilename(title = "abrir", initialdir="C:\\")
+    try:
+        global temp1
+        temp1 = filedialog.askopenfilename(title = "abrir", initialdir="C:\\")
+        global file1
+        x = open(temp1, "r")
+        file1 = x.read()
+        temp1.close()
+    except:
+         error = error + 1
     
 
 #funtion for caesa code. Encode and decode.
@@ -75,7 +83,7 @@ def caesar_code(text, dec, jump=6):
 #count the space in the text
 def count_space():
     l = 0
-    for c in str(file1):
+    for c in file1:
         if c == " ":            
             l += 1
         else:
@@ -121,23 +129,23 @@ def Mmtamano():
 
 def star_analize():
     visualstadistic.config(state = "normal")
-    diccio = frecuencia_total()
-    lista = Mmtamano()
-    try:
-        l = "hay ", count_space(), "espacios en el texto analizado"
-        for c in diccio.keys():
-            if c != " ":
-                n = ("la palabra", c, "se repite", diccio.get(c, c))
-            else: 
-                continue
-        b = "hay ", lista[0],"minusculas y ", lista[1], "Mayusculas", "en el texto"
-
-        result = l + n + b
-        visualstadistic.insert("insert", result)
-        visualstadistic.config(state = "disabled")
-
-    except:
-        return "not file selected"
+    if error == 0:
+        diccio = frecuencia_total()
+        lista = Mmtamano()
+        space = count_space()
+        if space <= 1:
+            l = "hay: {0} espacio \n".format(space)
+        else:
+            l = "hay: {0} espacios \n".format(space)
+            visualstadistic.insert("insert", l)
+        l = "hay: {0} minusculas y {1} Mayusculas \n".format(lista[0], lista[1])
+        visualstadistic.insert("insert", l)
+        for c in diccio:
+            l = "{0} se repite {1} veces \n".format(c, diccio[c])
+            visualstadistic.insert("insert", l)
+            visualstadistic.config(state = "disabled")
+    else:
+        visualstadistic.insert("insert", "ERROR")
 
 
 
@@ -147,18 +155,14 @@ welcomelabel.place(x = 70, y = 20)
 
 
 
-Button (pframe, text = "select file", command = openfile).place(x = 170, y = 50)
-Button (pframe, text = "analize", command = star_analize).place(x = 180,y = 400)
+Bselect = Button (pframe, text = "select file", command = openfile).place(x = 170, y = 50)
+Banalize = Button (pframe, text = "analize", command = star_analize).place(x = 180,y = 400)
 
-
-
-
-switch = "disabled"
 
 # viewframe ---------------------------------
 visualdatalabel = Label(viewframe, text = "view data").place(x = 120, y = 40)
 visualstadistic = Text(viewframe, width = 28, height = 20, bg = "black", fg = "green", font = "Arial")
-visualstadistic.config(insertbackground = "green", state = "disabled")
+visualstadistic.config(insertbackground = "green", state = "disabled", bd = 1, relief = "raised", wrap = "word")
 visualstadistic.place(x = 20, y = 70)
 
 
@@ -166,6 +170,7 @@ visualstadistic.place(x = 20, y = 70)
 scrollvartvs = Scrollbar(viewframe, command = visualstadistic.yview)
 scrollvartvs.place(x = 277, y = 70, height = 160)
 visualstadistic.config(yscrollcommand = scrollvartvs.set)
+
 
 """ ADVERTENCIA REPARAR RECONOCIMIENTO DE / : y . COMO LETRA """
 raiz.mainloop()
