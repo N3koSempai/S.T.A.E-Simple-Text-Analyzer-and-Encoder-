@@ -5,7 +5,7 @@ Created on Fri Nov 13 01:38:52 2020
 @author: n3ko
 """
 from string import ascii_lowercase, ascii_uppercase
-from tkinter import filedialog, Tk, Frame, Button, Label, Text, Scrollbar
+from tkinter import filedialog, Tk, Frame, Button, Label, Text, Scrollbar, Checkbutton, IntVar
 
 #test new branch
 # View
@@ -32,7 +32,9 @@ viewframe.pack(side = "right")
 list = []
 count =0
 result="hola"
-error = 0
+#switches
+switchart=IntVar()
+switchmayus=IntVar()
 # logical funtion
 
 def openfile():
@@ -42,9 +44,9 @@ def openfile():
         global file1
         x = open(temp1, "r")
         file1 = x.read()
-        temp1.close()
+        x.close()
     except:
-         error = error + 1
+         print("archivo no seleccionado")
     
 
 #funtion for caesa code. Encode and decode.
@@ -128,24 +130,36 @@ def Mmtamano():
 # start the analize (call all funtion for analize the text)
 
 def star_analize():
-    visualstadistic.config(state = "normal")
-    if error == 0:
-        diccio = frecuencia_total()
-        lista = Mmtamano()
-        space = count_space()
-        if space <= 1:
-            l = "hay: {0} espacio \n".format(space)
-        else:
-            l = "hay: {0} espacios \n".format(space)
+    
+    
+    try:
+        if file1 == None:
+            raise ImportError
+        else:    
+            visualstadistic.config(state = "normal")
+            diccio = frecuencia_total()
+            lista = Mmtamano()
+            space = count_space()
+            if space <= 1:
+                l = "hay: {0} espacio \n".format(space)
+            else:
+                l = "hay: {0} espacios \n".format(space)
             visualstadistic.insert("insert", l)
-        l = "hay: {0} minusculas y {1} Mayusculas \n".format(lista[0], lista[1])
-        visualstadistic.insert("insert", l)
-        for c in diccio:
-            l = "{0} se repite {1} veces \n".format(c, diccio[c])
-            visualstadistic.insert("insert", l)
+            if switchmayus.get() == 1:
+                l = "hay: {0} minusculas y {1} Mayusculas \n".format(lista[0], lista[1])
+                visualstadistic.insert("insert", l)
+            else:
+                pass
+            if switchart.get() == 1:
+                for c in diccio:
+                    l = "{0} se repite {1} veces \n".format(c, diccio[c])
+                    visualstadistic.insert("insert", l)
+            else:
+                pass
             visualstadistic.config(state = "disabled")
-    else:
-        visualstadistic.insert("insert", "ERROR")
+    except:
+        visualstadistic.config(state = "normal")
+        visualstadistic.insert("insert", "ningun archivo seleccionado")
 
 
 
@@ -155,8 +169,12 @@ welcomelabel.place(x = 70, y = 20)
 
 
 
-Bselect = Button (pframe, text = "select file", command = openfile).place(x = 170, y = 50)
-Banalize = Button (pframe, text = "analize", command = star_analize).place(x = 180,y = 400)
+Bselect = Button (pframe, text = "select file", command = openfile).place(x = 150, y = 50)
+
+checkchart = Checkbutton(pframe, text = "Contar caracteres", variable = switchart, onvalue = 1, offvalue = 0).place(x = 30, y = 380)
+checkmayus = Checkbutton(pframe, text = "Contar May & min", variable = switchmayus, onvalue = 1, offvalue = 0).place(x = 30, y = 350)
+
+Banalize = Button (pframe, text = "analize", command = star_analize).place(x = 65,y = 420)
 
 
 # viewframe ---------------------------------
@@ -174,3 +192,7 @@ visualstadistic.config(yscrollcommand = scrollvartvs.set)
 
 """ ADVERTENCIA REPARAR RECONOCIMIENTO DE / : y . COMO LETRA """
 raiz.mainloop()
+try:
+    del globals()['file1']
+except:
+    print("error en el borrado de variable")
