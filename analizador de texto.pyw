@@ -131,12 +131,12 @@ def Mmtamano():
 
 def star_analize():
     
-    
     try:
         if file1 == None:
             raise ImportError
         else:    
             visualstadistic.config(state = "normal")
+            visualstadistic.delete(1.0, "end")
             diccio = frecuencia_total()
             lista = Mmtamano()
             space = count_space()
@@ -159,8 +159,9 @@ def star_analize():
             visualstadistic.config(state = "disabled")
     except:
         visualstadistic.config(state = "normal")
+        visualstadistic.delete(1.0, "end")
         visualstadistic.insert("insert", "ningun archivo seleccionado")
-
+        visualstadistic.config(state = "disabled")
 
 
 #labels in View
