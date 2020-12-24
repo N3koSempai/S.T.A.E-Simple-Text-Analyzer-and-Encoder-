@@ -4,14 +4,14 @@ Created on Fri Nov 13 01:38:52 2020
 
 @author: n3ko
 """
-from string import ascii_lowercase, ascii_uppercase
-from tkinter import filedialog, Tk, Frame, Button, Label, Text, Scrollbar, Checkbutton, IntVar
+from string import ascii_lowercase, ascii_uppercase, ascii_letters
+from tkinter import filedialog, Tk, Frame, Button, Label, Text, Scrollbar, Checkbutton, IntVar, Entry, StringVar
 
 #test new branch
 # View
 
 raiz = Tk()
-raiz.title(" analizador de texto FILO")
+raiz.title(" analizador de texto S.T.A.E")
 raiz.resizable(False, False)
 #raiz.iconbitmap()      ..... pendiente de disenar un icono
 raiz.geometry("708x460")
@@ -25,16 +25,17 @@ pframe.config(width = "400", height = "460")
 
 viewframe = Frame()
 viewframe.config(width = "300", height = "460",)
-viewframe.config(bg = "green")
+viewframe.config(bg = "brown")
 viewframe.pack(side = "right")
 
 #global variable
-list = []
-count =0
+
 result="hola"
 #switches
 switchart=IntVar()
 switchmayus=IntVar()
+switchdec=IntVar()
+jumpnump = StringVar()
 # logical funtion
 
 def openfile():
@@ -46,7 +47,7 @@ def openfile():
         file1 = x.read()
         x.close()
     except:
-         print("archivo no seleccionado")
+        print("archivo no seleccionado")
     
 
 #funtion for caesa code. Encode and decode.
@@ -60,22 +61,63 @@ def funcion_diccio():
         diccio[c] = n
         diccioinvert[n] = c
 
+def cypher_dec():
+    try:
+        if switchdec.get() == 1:
+            x = jumpnump.get()
+            x = int(x)
+            resultcypher = caesar_code(file1, 1, x)
+            new = open(temp1 + "cypher", "w")
+            new.write(resultcypher)
+           #visual change
+            visualstadistic.config(state = "normal")
+            visualstadistic.delete(1.0, "end")
+            visualstadistic.insert("insert", "texto sin cifrar \n")
+            visualstadistic.insert("insert", file1 + "\n \n")
+            visualstadistic.insert("insert", "texto cifrado \n")
+            visualstadistic.insert("insert", resultcypher + "\n")
+            visualstadistic.config(state = "disabled")
+            new.close()
+        else: 
+            x = jumpnump.get()
+            x = int(x)
+            resultcypher = caesar_code(file1, 0, x)
+            new = open(temp1 + "decypher", "w")
+            new.write(resultcypher)
+            #visual change
+            visualstadistic.config(state = "normal")
+            visualstadistic.delete(1.0, "end")
+            visualstadistic.insert("insert", "texto cifrado \n")
+            visualstadistic.insert("insert", file1 + "\n \n")
+            visualstadistic.insert("insert", "texto descifrado \n")
+            visualstadistic.insert("insert", resultcypher)
+            visualstadistic.config(state = "disabled")
+            new.close()
+    except:
+        print("error cypher text")
+        x = jumpnump.get()
+        x = int(x)
+        print(x)
+        print(type(x))
 
 def caesar_code(text, dec, jump=6):
+    funcion_diccio()
     texte = ""
     for c in text.lower():
-        if c in ascii_lowercase and dec == False and jump >= 1:
-               num = diccio.get(c)
-               num += jump
-               while num > 26:
-                     num -= 26
-               texte += diccioinvert.get(num)
-        elif c in ascii_lowercase and dec == True and jump >= 1:
+        if dec == 1 and jump >= 1 and c != " " and c in ascii_letters:
             num = diccio.get(c)
-            num -= jump
-            while num <= 0:
-                  num += 26
+            num = num + jump
+            while num > 26:
+                num -= 26
             texte += diccioinvert.get(num)
+        elif dec == 0 and jump >= 1 and c != " " and c in ascii_letters:
+            num = diccio.get(c)
+            num = num - jump
+            while num <= 0:
+                num += 26
+            texte += diccioinvert.get(num)
+        elif c == " " or c not in ascii_letters:
+            texte += c
         else:
             texte = "error"
     return texte
@@ -165,18 +207,22 @@ def star_analize():
 
 
 #labels in View
-welcomelabel = Label(pframe, text = "Welcome to Filo text analizer", fg = "black", font =("Arial", 12), bg = "gray")
-welcomelabel.place(x = 70, y = 20)
+welcomelabel = Label(pframe, text = "Welcome to S.T.A.E created by @N3kosempai", fg = "black", font =("Arial", 12), bg = "gray")
+welcomelabel.place(x = 30, y = 20)
 
+Label(pframe, text = "number of jump in cypher", fg = "black", font =("Arial",10), bg = "gray").place(x = 230, y = 300)
 
+Button (pframe, text = "select file", command = openfile).place(x = 150, y = 50)
 
-Bselect = Button (pframe, text = "select file", command = openfile).place(x = 150, y = 50)
+Checkbutton(pframe, text = "Contar caracteres", variable = switchart, onvalue = 1, offvalue = 0).place(x = 30, y = 380)
+Checkbutton(pframe, text = "Contar May & min", variable = switchmayus, onvalue = 1, offvalue = 0).place(x = 30, y = 350)
+Checkbutton(pframe, text = "cypher or decypher", variable = switchdec, onvalue = 1, offvalue = 0).place(x = 240, y = 380) 
 
-checkchart = Checkbutton(pframe, text = "Contar caracteres", variable = switchart, onvalue = 1, offvalue = 0).place(x = 30, y = 380)
-checkmayus = Checkbutton(pframe, text = "Contar May & min", variable = switchmayus, onvalue = 1, offvalue = 0).place(x = 30, y = 350)
+Button(pframe, text = "analize", command = star_analize).place(x = 65,y = 420)
+#cypher
+jumpentry = Entry(pframe, textvariable = jumpnump, justify = "center").place(x = 240, y = 325)
 
-Banalize = Button (pframe, text = "analize", command = star_analize).place(x = 65,y = 420)
-
+Button(pframe, text = "cypher", command = cypher_dec).place(x = 280, y = 420)
 
 # viewframe ---------------------------------
 visualdatalabel = Label(viewframe, text = "view data").place(x = 120, y = 40)
@@ -194,6 +240,6 @@ visualstadistic.config(yscrollcommand = scrollvartvs.set)
 """ ADVERTENCIA REPARAR RECONOCIMIENTO DE / : y . COMO LETRA """
 raiz.mainloop()
 try:
-    del globals()['file1']
+    del globals()["file1"]
 except:
     print("error en el borrado de variable")
