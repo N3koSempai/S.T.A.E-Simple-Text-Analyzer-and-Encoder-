@@ -2,7 +2,7 @@
 
 #@author: N3koSempai
 
-
+from modules.frequency import allfrequency
 from string import ascii_lowercase, ascii_uppercase, ascii_letters
 import os
 
@@ -26,11 +26,14 @@ class Main():
                 return buffer
             else:
                 return None
+    
 
 
     def analyze(self):
         buffer = self.openfile(self.file)
         print(buffer)
+        count_space = allfrequency(buffer)
+        print(count_space)
 
 
 main = Main('LICENSE')
